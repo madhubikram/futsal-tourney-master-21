@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Match, Team } from '../types/tournament';
@@ -30,6 +29,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
   isPastMatch = false,
   isCurrentRound = false
 }) => {
+  const [isScoreDialogOpen, setIsScoreDialogOpen] = useState(false);
   const [score1, setScore1] = useState<string>(match.score1?.toString() || '');
   const [score2, setScore2] = useState<string>(match.score2?.toString() || '');
   const [penalties1, setPenalties1] = useState<string>(match.penalties1?.toString() || '');
@@ -52,20 +52,17 @@ const MatchCard: React.FC<MatchCardProps> = ({
     let newPenalties2 = penalties2 ? parseInt(penalties2) : null;
     
     if (newScore1 === newScore2) {
-      if (isNaN(newPenalties1 as number) || isNaN(newPenalties2 as number)) {
-        newPenalties1 = 0;
-        newPenalties2 = 0;
-        setPenalties1('0');
-        setPenalties2('0');
+      if (penalties1 && penalties2) {
+        newPenalties1 = parseInt(penalties1);
+        newPenalties2 = parseInt(penalties2);
       }
     } else {
       newPenalties1 = null;
       newPenalties2 = null;
-      setPenalties1('');
-      setPenalties2('');
     }
     
     onUpdateScore(match.id, newScore1, newScore2, newPenalties1, newPenalties2);
+    setIsScoreDialogOpen(false);
   };
   
   const handleSubmitTime = () => {
@@ -75,16 +72,16 @@ const MatchCard: React.FC<MatchCardProps> = ({
     onUpdateTime(match.id, date);
   };
   
-  const showPenalties = match.score1 === match.score2 && match.score1 !== null;
+  const showPenalties = score1 === score2 && score1 !== '';
   
   const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
   const minutes = Array.from({ length: 12 }, (_, i) => (i * 5).toString().padStart(2, '0'));
   
   return (
     <div className={cn(
-      "glass-card border rounded-xl p-4 shadow-sm match-card-transition w-64",
+      "neo-blur rounded-xl p-4 shadow-lg w-64 transition-all duration-300",
       isPastMatch ? "opacity-75" : "opacity-100",
-      isCurrentRound ? "border-futsal-500 ring-1 ring-futsal-500/30" : "",
+      isCurrentRound ? "ring-2 ring-futsal-500/50" : "",
       match.isBye ? "opacity-50" : ""
     )}>
       <div className="text-xs text-muted-foreground mb-2">
@@ -118,36 +115,42 @@ const MatchCard: React.FC<MatchCardProps> = ({
       
       {!match.isBye && (team1 || team2) && (
         <div className="mt-4 flex justify-between space-x-2">
-          <Dialog>
+          <Dialog open={isScoreDialogOpen} onOpenChange={setIsScoreDialogOpen}>
             <DialogTrigger asChild>
-              <Button size="sm" variant="outline">Set Score</Button>
+              <Button 
+                size="sm" 
+                variant="outline"
+                className="bg-futsal-950/50 hover:bg-futsal-900/50 text-futsal-50"
+              >
+                Set Score
+              </Button>
             </DialogTrigger>
-            <DialogContent>
+            <DialogContent className="bg-slate-900 border-futsal-500/20">
               <DialogHeader>
-                <DialogTitle>Update Match Score</DialogTitle>
+                <DialogTitle className="text-futsal-50">Update Match Score</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 py-4">
                 <div className="flex items-center justify-between">
-                  <div className="font-medium">
+                  <div className="font-medium text-futsal-50">
                     {team1?.name || "TBD"}
                   </div>
                   <Input
                     type="number"
                     min="0"
-                    className="w-16 text-center"
+                    className="w-16 text-center bg-slate-800 border-futsal-500/20 text-futsal-50"
                     value={score1}
                     onChange={(e) => setScore1(e.target.value)}
                   />
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <div className="font-medium">
+                  <div className="font-medium text-futsal-50">
                     {team2?.name || "TBD"}
                   </div>
                   <Input
                     type="number"
                     min="0"
-                    className="w-16 text-center"
+                    className="w-16 text-center bg-slate-800 border-futsal-500/20 text-futsal-50"
                     value={score2}
                     onChange={(e) => setScore2(e.target.value)}
                   />
@@ -155,27 +158,27 @@ const MatchCard: React.FC<MatchCardProps> = ({
                 
                 {showPenalties && (
                   <>
-                    <div className="text-center text-sm font-medium mt-4 mb-2">
+                    <div className="text-center text-sm font-medium mt-4 mb-2 text-futsal-50">
                       Penalties
                     </div>
                     <div className="flex justify-between space-x-4">
                       <div className="space-y-2">
-                        <div className="text-sm">{team1?.name}</div>
+                        <div className="text-sm text-futsal-100">{team1?.name}</div>
                         <Input
                           type="number"
                           min="0"
-                          className="w-16 text-center"
+                          className="w-16 text-center bg-slate-800 border-futsal-500/20 text-futsal-50"
                           value={penalties1}
                           onChange={(e) => setPenalties1(e.target.value)}
                         />
                       </div>
                       
                       <div className="space-y-2">
-                        <div className="text-sm">{team2?.name}</div>
+                        <div className="text-sm text-futsal-100">{team2?.name}</div>
                         <Input
                           type="number"
                           min="0"
-                          className="w-16 text-center"
+                          className="w-16 text-center bg-slate-800 border-futsal-500/20 text-futsal-50"
                           value={penalties2}
                           onChange={(e) => setPenalties2(e.target.value)}
                         />
@@ -185,7 +188,12 @@ const MatchCard: React.FC<MatchCardProps> = ({
                 )}
                 
                 <div className="flex justify-end">
-                  <Button onClick={handleSubmitScore}>Save</Button>
+                  <Button 
+                    onClick={handleSubmitScore}
+                    className="bg-futsal-600 hover:bg-futsal-700 text-white"
+                  >
+                    Save
+                  </Button>
                 </div>
               </div>
             </DialogContent>

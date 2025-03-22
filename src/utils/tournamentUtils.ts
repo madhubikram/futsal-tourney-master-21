@@ -1,4 +1,3 @@
-
 import { Match, Team, Tournament, Player } from "../types/tournament";
 
 // Generate initial matches for a tournament
@@ -104,8 +103,8 @@ export function updateMatch(
   // Update scores
   match.score1 = score1;
   match.score2 = score2;
-  match.penalties1 = penalties1 ?? null;
-  match.penalties2 = penalties2 ?? null;
+  match.penalties1 = penalties1;
+  match.penalties2 = penalties2;
   
   // Determine winner and loser
   let winnerId: string | null = null;
@@ -118,7 +117,6 @@ export function updateMatch(
     winnerId = match.team2Id;
     loserId = match.team1Id;
   } else if (score1 === score2 && penalties1 !== null && penalties2 !== null) {
-    // Penalties
     if (penalties1 > penalties2) {
       winnerId = match.team1Id;
       loserId = match.team2Id;
@@ -137,9 +135,8 @@ export function updateMatch(
     if (nextMatchIndex !== -1) {
       const nextMatch = matches[nextMatchIndex];
       
-      // Determine if winner goes to team1 or team2 slot
-      const isEvenMatchNumber = match.matchNumber % 2 === 0;
-      if (isEvenMatchNumber) {
+      // Determine if winner goes to team1 or team2 slot based on match number
+      if (match.matchNumber % 2 === 0) {
         nextMatch.team2Id = winnerId;
       } else {
         nextMatch.team1Id = winnerId;
@@ -147,9 +144,8 @@ export function updateMatch(
     }
   }
   
-  // Handle third place match - find the losers of the semifinal matches
-  const isSemiFinal = match.round === tournament.totalRounds - 1;
-  if (isSemiFinal && loserId) {
+  // Handle third place match
+  if (match.round === tournament.totalRounds - 1 && loserId) {
     const thirdPlaceMatch = matches.find(m => m.isThirdPlace);
     if (thirdPlaceMatch) {
       if (thirdPlaceMatch.team1Id === null) {
@@ -162,8 +158,23 @@ export function updateMatch(
   
   return {
     ...tournament,
-    matches
+    matches,
+    currentRound: determineCurrentRound(matches)
   };
+}
+
+// Helper function to determine current round
+function determineCurrentRound(matches: Match[]): number {
+  const rounds = matches.map(m => m.round);
+  const maxRound = Math.max(...rounds);
+  
+  for (let round = 1; round <= maxRound; round++) {
+    const roundMatches = matches.filter(m => m.round === round && !m.isThirdPlace);
+    const allMatchesComplete = roundMatches.every(m => m.winnerId !== null);
+    if (!allMatchesComplete) return round;
+  }
+  
+  return maxRound;
 }
 
 // Set match time
