@@ -67,17 +67,17 @@ export default {
 					ring: 'hsl(var(--sidebar-ring))'
 				},
 				futsal: {
-					'50': '#f0fdfa',
-					'100': '#ccfcf1',
-					'200': '#99f6e4',
-					'300': '#5fe9d0',
-					'400': '#2ed3b7',
-					'500': '#15b79e',
-					'600': '#0e9384',
-					'700': '#10766c',
-					'800': '#115e57',
-					'900': '#134e48',
-					'950': '#042f2c',
+					'50': '#ebfef4',
+					'100': '#d0fce4',
+					'200': '#a4f7cd',
+					'300': '#69eeaf',
+					'400': '#2fdd8c',
+					'500': '#0cc170',
+					'600': '#0d9b5e',
+					'700': '#107a4e',
+					'800': '#10613f',
+					'900': '#0f5035',
+					'950': '#022d1e',
 				}
 			},
 			borderRadius: {
@@ -118,6 +118,9 @@ export default {
 				'slide-up': 'slide-up 0.4s ease-out',
 				'slide-in-right': 'slide-in-right 0.4s ease-out',
 				'scale-in': 'scale-in 0.3s ease-out'
+			},
+			boxShadow: {
+				'glow': '0 0 15px 1px rgba(12, 193, 112, 0.4)',
 			}
 		}
 	},

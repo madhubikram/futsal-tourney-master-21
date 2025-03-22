@@ -7,33 +7,33 @@
 
 @layer base {
   :root {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
+    --background: 150 15% 6%;
+    --foreground: 120 10% 98%;
     
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
+    --card: 150 15% 8%;
+    --card-foreground: 120 10% 98%;
     
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 150 15% 6%;
+    --popover-foreground: 120 10% 98%;
     
-    --primary: 172 80% 40%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 140 70% 45%;
+    --primary-foreground: 150 15% 6%;
     
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 150 15% 15%;
+    --secondary-foreground: 120 10% 98%;
     
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    --muted: 150 15% 15%;
+    --muted-foreground: 120 10% 75%;
     
-    --accent: 172 70% 15%;
-    --accent-foreground: 175 84% 72%;
+    --accent: 140 70% 15%;
+    --accent-foreground: 140 70% 75%;
     
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 40%;
+    --destructive-foreground: 120 10% 98%;
     
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 172 80% 40%;
+    --border: 150 15% 20%;
+    --input: 150 15% 20%;
+    --ring: 140 70% 45%;
     
     --radius: 0.75rem;
   }
@@ -53,7 +53,7 @@
 
 /* Custom Bracket Styles */
 .bracket-line {
-  @apply transition-all duration-300 ease-in-out;
+  @apply transition-all duration-300 ease-in-out border-futsal-500;
 }
 
 .match-card-transition {
@@ -62,6 +62,7 @@
 
 .match-card-transition:hover {
   transform: translateY(-2px);
+  @apply shadow-lg shadow-futsal-500/20;
 }
 
 /* Glass effect */
@@ -71,6 +72,30 @@
 
 .neo-blur {
   @apply backdrop-blur-2xl bg-slate-900/40 border border-futsal-500/20;
+}
+
+/* Card enhancements */
+.tournament-card {
+  @apply bg-gradient-to-br from-slate-900 to-slate-800 border border-futsal-500/30 shadow-lg shadow-futsal-900/10;
+}
+
+.match-card {
+  @apply bg-gradient-to-br from-slate-900 to-slate-800 border border-futsal-500/30 
+         hover:border-futsal-500/50 transition-all shadow-md hover:shadow-lg hover:shadow-futsal-900/20;
+}
+
+.stats-card {
+  @apply bg-gradient-to-br from-slate-900 to-slate-800 border border-futsal-500/20 
+         hover:border-futsal-500/40 transition-all;
+}
+
+/* Input and field enhancements */
+.input-field {
+  @apply bg-slate-800 border-futsal-700 focus:border-futsal-500 focus:ring-futsal-500/50;
+}
+
+.score-input {
+  @apply bg-slate-800 border-futsal-700 text-white text-center;
 }
 
 /* Custom scrollbar */
@@ -89,4 +114,18 @@
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-futsal-700;
+}
+
+/* Button enhancements */
+.button-glow {
+  @apply hover:shadow-md hover:shadow-futsal-500/40 transition-all duration-300;
+}
+
+/* Tournament progress bar */
+.progress-bar {
+  @apply h-2 bg-slate-800 rounded-full overflow-hidden;
+}
+
+.progress-fill {
+  @apply h-full bg-gradient-to-r from-futsal-800 to-futsal-500 rounded-full;
 }
