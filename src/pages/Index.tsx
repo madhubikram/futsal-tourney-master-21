@@ -7,8 +7,8 @@ import { Trophy, Users, Calendar, Target } from 'lucide-react';
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <header className="border-b bg-white/80 backdrop-blur-md sticky top-0 z-10">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
+      <header className="border-b bg-white/80 backdrop-blur-md dark:bg-slate-900/80 sticky top-0 z-10">
         <div className="container mx-auto py-4 px-4 flex items-center justify-between">
           <div className="flex items-center">
             <Trophy className="h-6 w-6 text-futsal-500 mr-2" />
