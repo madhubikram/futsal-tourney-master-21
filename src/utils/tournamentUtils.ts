@@ -1,3 +1,4 @@
+
 import { Match, Team, Tournament, Player } from "../types/tournament";
 
 // Generate initial matches for a tournament
@@ -80,6 +81,20 @@ export function generateInitialMatches(teams: Team[]): Match[] {
       }
     }
   }
+  
+  // Process bye matches to immediately advance teams
+  matches.forEach(match => {
+    if (match.isBye && match.team1Id && match.nextMatchId) {
+      const nextMatch = matches.find(m => m.id === match.nextMatchId);
+      if (nextMatch) {
+        if (match.matchNumber % 2 === 1) {
+          nextMatch.team1Id = match.team1Id;
+        } else {
+          nextMatch.team2Id = match.team1Id;
+        }
+      }
+    }
+  });
   
   return matches;
 }

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { format } from 'date-fns';
 import { Match, Team } from '../types/tournament';
@@ -72,6 +73,7 @@ const MatchCard: React.FC<MatchCardProps> = ({
     onUpdateTime(match.id, date);
   };
   
+  // Check if scores are equal to show penalties input
   const showPenalties = score1 === score2 && score1 !== '';
   
   const hours = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, '0'));
